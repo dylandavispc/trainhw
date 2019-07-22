@@ -13,6 +13,29 @@ firebase.initializeApp(config);
 
 database = firebase.database();
 
+//FireBase Adding Train Event
+database.ref().on("child_added", function(childSnapshot) {
+    console.log(childSnapshot.val());
+
+    //Storing Variables
+    let trnName = childSnapshot.val().trnName;
+    let trnDest = childSnapshot.val().trnDest;
+    let trnFirst = childSnapshot.val().trnFirst;
+    let trnFreq = childSnapshot.val().trnFreq;
+    
+    //Run Time Functions
+
+    //Create New Train Row
+    let newRow = $("<tr>").append(
+        $("<td>").text(trnName),
+        $("<td>").text(trnDest),
+        $("<td>").text(trnFirst),
+        $("<td>").text(trnFirst),
+        $("<td>").text(trnFreq)
+    )
+    $("#train-table > tbody").append(newRow);
+})
+
 //BUTTONS================================================================================
 //Add Train Button
 $("#add-train-btn").on("click", function(event) {
