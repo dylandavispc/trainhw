@@ -1,4 +1,4 @@
-//INITIALIZATION========================================================================
+//FIREBASE========================================================================
 //Firebase INIT
 const config = {
     apiKey: "AIzaSyCHPtHtYIuR_3fUFrj_6h4DZUrrY4D_reU",
@@ -18,20 +18,21 @@ database.ref().on("child_added", function(childSnapshot) {
     console.log(childSnapshot.val());
 
     //Storing Variables
-    let trnName = childSnapshot.val().trnName;
-    let trnDest = childSnapshot.val().trnDest;
-    let trnFirst = childSnapshot.val().trnFirst;
-    let trnFreq = childSnapshot.val().trnFreq;
+    let name = childSnapshot.val().trnName;
+    let dest = childSnapshot.val().trnDest;
+    let freq = childSnapshot.val().trnFreq;
+    let ariv = arrival(childSnapshot.val().trnFirst, childSnapshot.val().trnFreq);
+    let away = away(childSnapshot.val().trnFirst, childSnapshot.val().trnFreq);
     
     //Run Time Functions
 
     //Create New Train Row
     let newRow = $("<tr>").append(
-        $("<td>").text(trnName),
-        $("<td>").text(trnDest),
-        $("<td>").text(trnFirst),
-        $("<td>").text(trnFirst),
-        $("<td>").text(trnFreq)
+        $("<td>").text(name),
+        $("<td>").text(dest),
+        $("<td>").text(freq),
+        $("<td>").text(ariv),
+        $("<td>").text(away)
     )
     $("#train-table > tbody").append(newRow);
 })
@@ -75,3 +76,13 @@ $("#add-train-btn").on("click", function(event) {
 
 
 //TIME FUNCTIONS=========================================================================
+//Time Till Arrival Function
+function arrival( x , y ) {
+    
+
+    //Calculate time till arrival
+    let minLeft = moment(now,"x").diff(moment(x,"DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss";
+    console.log(minLeft);
+
+    return(minLeft);
+}
