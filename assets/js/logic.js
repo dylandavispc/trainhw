@@ -15,24 +15,28 @@ database = firebase.database();
 
 //FireBase Adding Train Event
 database.ref().on("child_added", function(childSnapshot) {
-    console.log(childSnapshot.val());
 
     //Storing Variables
     let name = childSnapshot.val().trnName;
     let dest = childSnapshot.val().trnDest;
     let freq = childSnapshot.val().trnFreq;
-    let ariv = arrival(childSnapshot.val().trnFirst, childSnapshot.val().trnFreq);
-    let away = away(childSnapshot.val().trnFirst, childSnapshot.val().trnFreq);
+    let trnFirst = childSnapshot.val().trnFirst;
     
-    //Run Time Functions
+    //Time Function Variables
+    let timeConv = moment(trnFirst, "X");
+    let diffTime = moment().diff(moment(timeConv), "minutes");
+    let tRemain = diffTime % freq;
+    let minAway = freq - tRemain;
+    let arrival = moment().add(minAway, "minutes");
+    let arivPretty = moment(arrival).format("HH:mm");
 
     //Create New Train Row
     let newRow = $("<tr>").append(
         $("<td>").text(name),
         $("<td>").text(dest),
         $("<td>").text(freq),
-        $("<td>").text(ariv),
-        $("<td>").text(away)
+        $("<td>").text(arivPretty),
+        $("<td>").text(minAway)
     )
     $("#train-table > tbody").append(newRow);
 })
@@ -67,22 +71,3 @@ $("#add-train-btn").on("click", function(event) {
     $("#train-first-input").val("");
     $("#train-freq-input").val("");
 });
-
-//FUNCTIONS==============================================================================
-
-
-
-
-
-
-//TIME FUNCTIONS=========================================================================
-//Time Till Arrival Function
-function arrival( x , y ) {
-    
-
-    //Calculate time till arrival
-    let minLeft = moment(now,"x").diff(moment(x,"DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss";
-    console.log(minLeft);
-
-    return(minLeft);
-}
